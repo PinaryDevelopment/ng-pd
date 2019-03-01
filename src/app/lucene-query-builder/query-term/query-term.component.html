@@ -1,0 +1,29 @@
+<fa-icon
+  class="operator"
+  tabindex="0"
+  [icon]="faMinus"
+  [class.hidden]="queryTerm.operator !== QueryOperator.Prohibited && !hoveringOverTerm"
+  (click)="setOperator(QueryOperator.Prohibited)"
+  (keyup.enter)="setOperator(QueryOperator.Prohibited)">
+</fa-icon>
+<fa-icon
+  class="operator"
+  tabindex="0"
+  [icon]="faPlus"
+  [class.hidden]="queryTerm.operator !== QueryOperator.Required && !hoveringOverTerm"
+  (click)="setOperator(QueryOperator.Required)"
+  (keyup.enter)="setOperator(QueryOperator.Required)">
+</fa-icon>
+<fa-icon
+  class="quote left"
+  *ngIf="queryTerm.type === QueryTermType.Phrase"
+  [icon]="faQuoteRight">
+</fa-icon>
+<span>
+  {{queryTerm.term}}
+</span>
+<fa-icon
+  class="quote"
+  *ngIf="queryTerm.type === QueryTermType.Phrase"
+  [icon]="faQuoteRight">
+</fa-icon>
