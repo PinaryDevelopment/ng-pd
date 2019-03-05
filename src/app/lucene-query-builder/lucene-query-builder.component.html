@@ -1,8 +1,10 @@
-<ng-container *ngFor="let queryTerm of query.terms; let $i = index">
-  <app-query-conjunction-operator *ngIf="$i !== 0" [operator]="query.operators[$i - 1]" (change)="query.operators[$i - 1] = $event"></app-query-conjunction-operator>
-  <app-query-term [queryTerm]="queryTerm" (change)="queryTerm = $event"></app-query-term>
-</ng-container>
+<div class="faux-input" [class.focused]="userInputInFocus" (click)="giveUserInputFocus()">
+  <ng-container *ngFor="let queryTerm of query.terms; let $i = index">
+    <app-query-conjunction-operator *ngIf="$i !== 0" [operator]="query.operators[$i - 1]" (change)="query.operators[$i - 1] = $event"></app-query-conjunction-operator>
+    <app-query-term [queryTerm]="queryTerm" (change)="queryTerm = $event"></app-query-term>
+  </ng-container>
 
-<input #userInput type="text" (keydown)="onKeydown($event)" />
+  <input #userInput type="text" (keydown)="onKeydown($event)" (focus)="userInputInFocus = true"  (blur)="userInputInFocus = false" />
+</div>
 
-<button type="button" (click)="emitQuery()">Search</button>
+<button class="primary" type="button" (click)="emitQuery()">Search</button>

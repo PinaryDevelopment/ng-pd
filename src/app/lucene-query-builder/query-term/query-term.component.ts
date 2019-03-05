@@ -22,6 +22,11 @@ export class QueryTermComponent {
   faQuoteRight = faQuoteRight;
   hoveringOverTerm = false;
 
+  @HostListener('click', ['$event']) onClick($event: MouseEvent) {
+    $event.preventDefault();
+    $event.stopPropagation();
+  }
+
   @HostListener('mouseover') onMouseover() {
     this.hoveringOverTerm = true;
   }

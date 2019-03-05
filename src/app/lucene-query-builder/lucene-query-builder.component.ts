@@ -4,7 +4,7 @@
  * - https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
  */
 
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
@@ -24,7 +24,9 @@ import { Query, QueryTerm } from './models';
 })
 export class LuceneQueryBuilderComponent implements OnInit, OnDestroy {
   query = new Query();
+  userInputInFocus = false;
 
+  @ViewChild('userInput') userInputElement: ElementRef;
   private input: Observable<KeyboardEvent>;
   private inputSubject = new Subject<KeyboardEvent>();
   private subscriptions: Subscription[] = [];
@@ -57,6 +59,10 @@ export class LuceneQueryBuilderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  giveUserInputFocus() {
+    (this.userInputElement.nativeElement as HTMLInputElement).focus();
   }
 
   private noop2(e: any) { console.log('noop2', e); }

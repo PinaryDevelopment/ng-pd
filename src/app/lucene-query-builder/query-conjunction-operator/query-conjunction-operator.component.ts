@@ -14,7 +14,7 @@ export class QueryConjuctionOperatorComponent {
 
   QueryConjuctionOperator = QueryConjuctionOperator;
 
-  toggleOperator() {
+  toggleOperator($event: UIEvent) {
     switch (this.operator) {
       case QueryConjuctionOperator.OR:
         this.operator = QueryConjuctionOperator.AND;
@@ -28,5 +28,7 @@ export class QueryConjuctionOperatorComponent {
     }
 
     this.change.emit(this.operator);
+    $event.preventDefault();
+    $event.stopPropagation();
   }
 }

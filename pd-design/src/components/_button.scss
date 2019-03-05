@@ -1,0 +1,15 @@
+@import '../variables/index';
+
+button {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: $default-font-family;
+  font-size: $default-font-size;
+  padding: 6px 18px;
+  white-space: nowrap;
+
+  &.primary {
+    color: $primary;
+  }
+}

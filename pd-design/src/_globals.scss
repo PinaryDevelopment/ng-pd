@@ -1,3 +1,5 @@
+@import './variables/fonts';
+
 *,
 *::before,
 *::after {
@@ -6,8 +8,8 @@
 
 html,
 body {
-  font-family: 'Poly', serif;
-  font-size: 14px;
+  font-family: $default-font-family;
+  font-size: $default-font-size;
   height: 100%;
   margin: 0;
 }

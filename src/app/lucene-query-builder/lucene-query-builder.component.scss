@@ -1,0 +1,41 @@
+:host {
+  display: flex;
+  align-items: center;
+
+  button {
+    margin: 0 0 0 10px;
+    width: auto;
+  }
+
+  .faux-input {
+    border: 1px solid #bbb;
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    width: 100%;
+
+    &.focused {
+      outline: rgb(77, 144, 254) auto 5px;
+    }
+
+    input {
+      border: none;
+      flex-grow: 1;
+      margin: .25rem;
+      padding: .25rem .5rem;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &.compact {
+    display: block;
+
+    button {
+      margin: 10px 0 0;
+      width: 100%;
+    }
+  }
+}
