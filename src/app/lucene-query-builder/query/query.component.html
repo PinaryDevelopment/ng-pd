@@ -1,0 +1,7 @@
+<ng-container *ngFor="let queryTerm of query.terms; let $i = index">
+  <app-query-conjunction-operator *ngIf="$i !== 0" [operator]="query.operators[$i - 1]" (change)="query.operators[$i - 1] = $event"></app-query-conjunction-operator>
+  <app-query-term cdkDrag cdkDropList *ngIf="!isQuery(queryTerm)" cdkDragLockAxis="x" [queryTerm]="queryTerm" [cdkDragData]="queryTerm" [cdkDropListData]="queryTerm" (change)="queryTerm = $event" (cdkDropListDropped)="onDrop($event)"></app-query-term>
+  <ng-container *ngIf="isQuery(queryTerm)">
+    (<app-query cdkDrag cdkDropList cdkDragLockAxis="x" [cdkDragData]="queryTerm" [cdkDropListData]="queryTerm" (cdkDropListDropped)="onDrop($event)" [query]="queryTerm"></app-query>)
+  </ng-container>
+</ng-container>

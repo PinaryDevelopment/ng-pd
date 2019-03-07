@@ -68,15 +68,26 @@ export class LuceneQueryBuilderComponent implements OnInit, OnDestroy {
   private noop2(e: any) { console.log('noop2', e); }
 
   private onTab(event: KeyboardEvent) {
-    this.query.addTerm(new QueryTerm((event.target as HTMLInputElement).value));
+    this.addTerm((event.target as HTMLInputElement).value);
     event.preventDefault();
     event.stopPropagation();
   }
 
   private onEnter(event: KeyboardEvent) {
-    this.query.addTerm(new QueryTerm((event.target as HTMLInputElement).value));
+    this.addTerm((event.target as HTMLInputElement).value);
   }
 
+  private addTerm(term: string) {
+    this.query.addTerm(new QueryTerm(term));
+    this.query = this.query.clone();
+    (this.userInputElement.nativeElement as HTMLInputElement).value = '';
+  }
+
+  /*
+   * Modified 'Event Bus' pattern from:
+   * https://www.pluralsight.com/courses/angular-architecture-best-practices
+   * https://github.com/DanWahlin/angular-architecture/blob/master/demos/src/app/core/services/event-bus.service.ts
+   */
   private on(filters: { listenTo?: string[], ignore?: string[] }): Observable<KeyboardEvent> {
     return this.input
                .pipe(
