@@ -7,7 +7,6 @@ import { LuceneQueryBuilderComponent } from './lucene-query-builder/lucene-query
 import { QueryConjuctionOperatorComponent } from './lucene-query-builder/query-conjunction-operator/query-conjunction-operator.component';
 import { QueryComponent } from './lucene-query-builder/query/query.component';
 import { QueryTermComponent } from './lucene-query-builder/query-term/query-term.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   imports: [
     BrowserModule,
-    DragDropModule,
-    FontAwesomeModule
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

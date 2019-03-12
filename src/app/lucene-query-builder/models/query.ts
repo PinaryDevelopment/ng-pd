@@ -4,10 +4,10 @@ import { QueryTerm } from './query-term';
 export class Query {
   constructor(public terms: (QueryTerm | Query)[] = [], public operators: QueryConjuctionOperator[] = []) {}
 
-  addTerm(term: QueryTerm | Query): void {
+  addTerm(term: QueryTerm | Query, operator: QueryConjuctionOperator = QueryConjuctionOperator.OR): void {
     this.terms.push(term);
     if (this.terms.length > 1) {
-      this.operators.push(QueryConjuctionOperator.OR);
+      this.operators.push(operator);
     }
   }
 

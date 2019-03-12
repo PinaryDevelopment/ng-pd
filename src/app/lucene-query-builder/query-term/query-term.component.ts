@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
-import { faMinus, faPlus, faQuoteRight } from '@fortawesome/free-solid-svg-icons';
 
 import { QueryTerm, QueryTermType, QueryOperator } from '../models';
 
@@ -13,19 +12,11 @@ export class QueryTermComponent {
   @Input() queryTerm: QueryTerm;
   @Output() change = new EventEmitter<QueryTerm>();
 
-  @HostBinding('class.chip') chipClass = true;
+  @HostBinding('class') classes = 'chip';
 
   QueryOperator = QueryOperator;
   QueryTermType = QueryTermType;
-  faMinus = faMinus;
-  faPlus = faPlus;
-  faQuoteRight = faQuoteRight;
   hoveringOverTerm = false;
-
-  @HostListener('click', ['$event']) onClick($event: MouseEvent) {
-    $event.preventDefault();
-    $event.stopPropagation();
-  }
 
   @HostListener('mouseover') onMouseover() {
     this.hoveringOverTerm = true;

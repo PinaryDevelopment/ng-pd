@@ -1,12 +1,15 @@
 import { TestBed, async } from '@angular/core/testing';
+import { AppModule } from '../app.module';
+
 import { LuceneQueryBuilderComponent } from './lucene-query-builder.component';
 
 describe('LuceneQueryBuilderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        LuceneQueryBuilderComponent
+      imports: [
+        AppModule
       ],
+      declarations: [],
     }).compileComponents();
   }));
 
@@ -14,18 +17,7 @@ describe('LuceneQueryBuilderComponent', () => {
     const fixture = TestBed.createComponent(LuceneQueryBuilderComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  });
 
-  it(`should have as title 'ng-pd-demo-app'`, () => {
-    const fixture = TestBed.createComponent(LuceneQueryBuilderComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('ng-pd-demo-app');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(LuceneQueryBuilderComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to ng-pd-demo-app!');
+    expect(true).toBeFalsy('force failure to remember that there are not any tests written for this component yet');
   });
 });

@@ -1,29 +1,6 @@
-<fa-icon
-  class="operator"
-  tabindex="0"
-  [icon]="faMinus"
-  [class.hidden]="queryTerm.operator !== QueryOperator.Prohibited && !hoveringOverTerm"
-  (click)="setOperator(QueryOperator.Prohibited)"
-  (keyup.enter)="setOperator(QueryOperator.Prohibited)">
-</fa-icon>
-<fa-icon
-  class="operator"
-  tabindex="0"
-  [icon]="faPlus"
-  [class.hidden]="queryTerm.operator !== QueryOperator.Required && !hoveringOverTerm"
-  (click)="setOperator(QueryOperator.Required)"
-  (keyup.enter)="setOperator(QueryOperator.Required)">
-</fa-icon>
-<fa-icon
-  class="quote left"
-  *ngIf="queryTerm.type === QueryTermType.Phrase"
-  [icon]="faQuoteRight">
-</fa-icon>
-<span>
-  {{queryTerm.term}}
-</span>
-<fa-icon
-  class="quote"
-  *ngIf="queryTerm.type === QueryTermType.Phrase"
-  [icon]="faQuoteRight">
-</fa-icon>
+<!-- https://angular.io/guide/transition-and-triggers#use-of-ngif-and-ngfor-with-enter-and-leave -->
+<span class="operator prohibited" *ngIf="queryTerm?.operator === QueryOperator.Prohibited || hoveringOverTerm" (click)="setOperator(QueryOperator.Prohibited)" (keyup.enter)="setOperator(QueryOperator.Prohibited)">-</span>
+<span class="operator required" *ngIf="queryTerm?.operator === QueryOperator.Required || hoveringOverTerm" (click)="setOperator(QueryOperator.Required)" (keyup.enter)="setOperator(QueryOperator.Required)">+</span>
+<ng-container *ngIf="queryTerm?.type === QueryTermType.Phrase">“</ng-container>
+<span>{{queryTerm?.term}}</span>
+<ng-container *ngIf="queryTerm?.type === QueryTermType.Phrase">”</ng-container>

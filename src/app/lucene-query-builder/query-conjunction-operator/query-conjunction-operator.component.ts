@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, HostBinding, HostListener } from '@angular/core';
 
 import { QueryConjuctionOperator } from '../models';
 
@@ -12,9 +12,19 @@ export class QueryConjuctionOperatorComponent {
   @Input() operator: QueryConjuctionOperator;
   @Output() change = new EventEmitter<QueryConjuctionOperator>();
 
+  @HostBinding('class') classes = 'chip clickable';
+
   QueryConjuctionOperator = QueryConjuctionOperator;
 
-  toggleOperator($event: UIEvent) {
+  @HostListener('click') onClick() {
+    this.toggleOperator();
+  }
+
+  @HostListener('keyup.enter') onEnter() {
+    this.toggleOperator();
+  }
+
+  toggleOperator() {
     switch (this.operator) {
       case QueryConjuctionOperator.OR:
         this.operator = QueryConjuctionOperator.AND;
@@ -28,7 +38,5 @@ export class QueryConjuctionOperatorComponent {
     }
 
     this.change.emit(this.operator);
-    $event.preventDefault();
-    $event.stopPropagation();
   }
 }

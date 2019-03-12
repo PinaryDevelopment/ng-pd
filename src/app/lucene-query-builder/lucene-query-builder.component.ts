@@ -15,6 +15,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { Query, QueryTerm } from './models';
+import { isNullOrWhiteSpace } from '../shared/string';
 
 @Component({
   selector: 'app-lucene-query-builder',
@@ -78,6 +79,8 @@ export class LuceneQueryBuilderComponent implements OnInit, OnDestroy {
   }
 
   private addTerm(term: string) {
+    if (isNullOrWhiteSpace(term)) { return; }
+
     this.query.addTerm(new QueryTerm(term));
     this.query = this.query.clone();
     (this.userInputElement.nativeElement as HTMLInputElement).value = '';
