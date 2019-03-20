@@ -58,7 +58,9 @@ describe('QueryTermComponent', () => {
 
     const prohibitedDebugElement = fixture.debugElement.query(By.css('.operator.prohibited'));
 
-    expect(prohibitedDebugElement).toBeNull();
+    /* tslint:disable:no-string-literal */
+    expect(prohibitedDebugElement.classes['hidden']).not.toBeNull();
+    /* tslint:enable */
   });
 
   it('should not show required element', () => {
@@ -66,7 +68,9 @@ describe('QueryTermComponent', () => {
 
     const requiredDebugElement = fixture.debugElement.query(By.css('.operator.required'));
 
-    expect(requiredDebugElement).toBeNull();
+    /* tslint:disable:no-string-literal */
+    expect(requiredDebugElement.classes['hidden']).not.toBeNull();
+    /* tslint:enable */
   });
 
   it('should show prohibited element', () => {

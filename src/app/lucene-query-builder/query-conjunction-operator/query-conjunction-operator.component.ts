@@ -12,7 +12,7 @@ export class QueryConjuctionOperatorComponent {
   @Input() operator: QueryConjuctionOperator;
   @Output() change = new EventEmitter<QueryConjuctionOperator>();
 
-  @HostBinding('class') classes = 'chip clickable';
+  @HostBinding('class') classes = 'chip clickable syntax';
 
   QueryConjuctionOperator = QueryConjuctionOperator;
 

@@ -1,18 +1,19 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 import { QueryTerm, QueryTermType, QueryOperator } from '../models';
 
 @Component({
   selector: 'app-query-term',
   templateUrl: './query-term.component.html',
-  styleUrls: ['./query-term.component.scss'],
+  styleUrls: [
+    '../lucene-query-builder.scss',
+    './query-term.component.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QueryTermComponent {
   @Input() queryTerm: QueryTerm;
   @Output() change = new EventEmitter<QueryTerm>();
-
-  @HostBinding('class') classes = 'chip';
 
   QueryOperator = QueryOperator;
   QueryTermType = QueryTermType;

@@ -1,5 +1,5 @@
 <div class="faux-input" [class.focused]="userInputInFocus" (click)="giveUserInputFocus()">
-  <app-query cdkDropListGroup [query]="query"></app-query>
+  <app-query *ngIf="query" cdkDropListGroup [query]="query"></app-query>
   <input #userInput type="text" (keydown)="onKeydown($event)" (focus)="userInputInFocus = true" (blur)="userInputInFocus = false" />
 </div>
 

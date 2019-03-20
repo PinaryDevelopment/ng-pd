@@ -1,6 +1,6 @@
 <!-- https://angular.io/guide/transition-and-triggers#use-of-ngif-and-ngfor-with-enter-and-leave -->
-<span class="operator prohibited" *ngIf="queryTerm?.operator === QueryOperator.Prohibited || hoveringOverTerm" (click)="setOperator(QueryOperator.Prohibited)" (keyup.enter)="setOperator(QueryOperator.Prohibited)">-</span>
-<span class="operator required" *ngIf="queryTerm?.operator === QueryOperator.Required || hoveringOverTerm" (click)="setOperator(QueryOperator.Required)" (keyup.enter)="setOperator(QueryOperator.Required)">+</span>
-<ng-container *ngIf="queryTerm?.type === QueryTermType.Phrase">“</ng-container>
-<span>{{queryTerm?.term}}</span>
-<ng-container *ngIf="queryTerm?.type === QueryTermType.Phrase">”</ng-container>
+<span class="operator prohibited syntax clickable" [class.hidden]="queryTerm?.operator !== QueryOperator.Prohibited && !hoveringOverTerm" (click)="setOperator(QueryOperator.Prohibited)" (keyup.enter)="setOperator(QueryOperator.Prohibited)">-</span>
+<span class="operator required syntax clickable" [class.hidden]="queryTerm?.operator !== QueryOperator.Required && !hoveringOverTerm" (click)="setOperator(QueryOperator.Required)" (keyup.enter)="setOperator(QueryOperator.Required)">+</span>
+<span class="syntax" *ngIf="queryTerm?.type === QueryTermType.Phrase">“</span>
+<span class="chip">{{queryTerm?.term}}</span>
+<span class="syntax" *ngIf="queryTerm?.type === QueryTermType.Phrase">”</span>
