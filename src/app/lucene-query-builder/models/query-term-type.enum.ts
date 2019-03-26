@@ -1,4 +1,5 @@
 export enum QueryTermType {
   SingleTerm,
-  Phrase
+  Phrase,
+  Range
 }

@@ -4,3 +4,8 @@
 <span class="syntax" *ngIf="queryTerm?.type === QueryTermType.Phrase">“</span>
 <span class="chip">{{queryTerm?.term}}</span>
 <span class="syntax" *ngIf="queryTerm?.type === QueryTermType.Phrase">”</span>
+<!--
+<span class="operator boost syntax clickable" [class.hidden]="!queryTerm?.boost && !hoveringOverTerm" (click)="boost()" (keyup.enter)="boost()">^</span>
+<span class="operator proximity syntax clickable" [class.hidden]="queryTerm?.type !== QueryTermType.Phrase || (!queryTerm?.proximity && !hoveringOverTerm)" (click)="proximity()" (keyup.enter)="proximity()">^</span>
+<span class="operator fuzzy syntax clickable" [class.hidden]="queryTerm?.type === QueryTermType.Phrase || (!queryTerm?.fuzzy && !hoveringOverTerm)" (click)="fuzzy()" (keyup.enter)="fuzzy()">^</span>
+-->
