@@ -1,11 +1,37 @@
 <!-- https://angular.io/guide/transition-and-triggers#use-of-ngif-and-ngfor-with-enter-and-leave -->
-<span class="operator prohibited syntax clickable" [class.hidden]="queryTerm?.operator !== QueryOperator.Prohibited && !hoveringOverTerm" (click)="setOperator(QueryOperator.Prohibited)" (keyup.enter)="setOperator(QueryOperator.Prohibited)">-</span>
-<span class="operator required syntax clickable" [class.hidden]="queryTerm?.operator !== QueryOperator.Required && !hoveringOverTerm" (click)="setOperator(QueryOperator.Required)" (keyup.enter)="setOperator(QueryOperator.Required)">+</span>
-<span class="syntax" *ngIf="queryTerm?.type === QueryTermType.Phrase">“</span>
-<span class="chip">{{queryTerm?.term}}</span>
-<span class="syntax" *ngIf="queryTerm?.type === QueryTermType.Phrase">”</span>
-<!--
-<span class="operator boost syntax clickable" [class.hidden]="!queryTerm?.boost && !hoveringOverTerm" (click)="boost()" (keyup.enter)="boost()">^</span>
-<span class="operator proximity syntax clickable" [class.hidden]="queryTerm?.type !== QueryTermType.Phrase || (!queryTerm?.proximity && !hoveringOverTerm)" (click)="proximity()" (keyup.enter)="proximity()">^</span>
-<span class="operator fuzzy syntax clickable" [class.hidden]="queryTerm?.type === QueryTermType.Phrase || (!queryTerm?.fuzzy && !hoveringOverTerm)" (click)="fuzzy()" (keyup.enter)="fuzzy()">^</span>
--->
+<ng-container *ngIf="queryTerm?.field">
+  <span>{{queryTerm.field}}</span>
+  <span class="syntax">:</span>
+</ng-container>
+<ng-container *ngIf="!queryTerm?.range">
+  <span class="operator prohibited syntax clickable" [class.hidden]="queryTerm?.operator !== QueryOperator.Prohibited && !hoveringOverTerm" (click)="setOperator(QueryOperator.Prohibited)" (keyup.enter)="setOperator(QueryOperator.Prohibited)">-</span>
+  <span class="operator required syntax clickable" [class.hidden]="queryTerm?.operator !== QueryOperator.Required && !hoveringOverTerm" (click)="setOperator(QueryOperator.Required)" (keyup.enter)="setOperator(QueryOperator.Required)">+</span>
+  <span class="syntax" *ngIf="queryTerm?.type === QueryTermType.Phrase">“</span>
+  <span class="chip">{{queryTerm?.term}}</span>
+  <!-- <span class="chip">
+    <ng-container *ngFor="let char of queryTerm?.term">
+      <ng-container *ngIf="char === '?' || char === '*'">
+        <span class="syntax">{{char}}</span>
+      </ng-container>
+      <ng-container *ngIf="char !== '?' && char !== '*'">
+        {{char}}
+      </ng-container>
+    </ng-container>
+  </span> -->
+  <ng-container *ngIf="queryTerm?.includeFuzzyMatches">
+    <span class="syntax">~</span>{{queryTerm.fuzzySimilarity}}
+  </ng-container>
+  <span class="syntax" *ngIf="queryTerm?.type === QueryTermType.Phrase">”</span>
+  <ng-container *ngIf="queryTerm?.onlyIncludeProximityMatches">
+    <span class="syntax">~</span>{{queryTerm.proximityDistance}}
+  </ng-container>
+  <ng-container *ngIf="queryTerm?.boostTerm">
+    <span class="syntax">^</span>{{queryTerm.boostFactor}}
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="queryTerm?.range">
+  {{queryTerm.range[0]}}
+  <span class="chip syntax">TO</span>
+  {{queryTerm.range[1]}}
+</ng-container>

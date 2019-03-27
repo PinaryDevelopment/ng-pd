@@ -1,12 +1,11 @@
-import * as StaticQuery from './query-extensions';
 import { QueryConjuctionOperator } from './query-conjunction-operator.enum';
 import { QueryTerm } from './query-term';
 
 
-export class Query extends StaticQuery.Query {
-  constructor(public terms: (QueryTerm | Query)[] = [], public operators: QueryConjuctionOperator[] = []) {
-    super();
+export class Query {
+  public field: string;
 
+  constructor(public terms: (QueryTerm | Query)[] = [], public operators: QueryConjuctionOperator[] = []) {
     this.terms = terms.map(term => {
       if ((term as Query).terms) {
         const query = term as Query;

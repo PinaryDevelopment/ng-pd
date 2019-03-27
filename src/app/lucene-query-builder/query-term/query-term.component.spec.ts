@@ -55,6 +55,9 @@ describe('QueryTermComponent', () => {
 
   it('should not show prohibited element', () => {
     const fixture = TestBed.createComponent(QueryTermComponent);
+    const component = fixture.debugElement.componentInstance;
+    component.queryTerm = new QueryTerm('');
+    fixture.detectChanges();
 
     const prohibitedDebugElement = fixture.debugElement.query(By.css('.operator.prohibited'));
 
@@ -65,6 +68,9 @@ describe('QueryTermComponent', () => {
 
   it('should not show required element', () => {
     const fixture = TestBed.createComponent(QueryTermComponent);
+    const component = fixture.debugElement.componentInstance;
+    component.queryTerm = new QueryTerm('');
+    fixture.detectChanges();
 
     const requiredDebugElement = fixture.debugElement.query(By.css('.operator.required'));
 

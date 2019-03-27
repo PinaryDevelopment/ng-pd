@@ -1,15 +1,18 @@
-import * as QueryClass from './query';
+import { Query } from './query';
 import { QueryTermType } from './query-term-type.enum';
 import { QueryOperator } from './query-operator.enum';
 import { QueryConjuctionOperator } from './query-conjunction-operator.enum';
 import { QueryTerm } from './query-term';
 
-export class Query {
-  static parse(input: string): QueryClass.Query {
-    const query = new QueryClass.Query();
+export class QueryParser {
+  static parse(input: string): Query {
+    return QueryParser._parse(input).query;
+  }
+
+  private static _parse(input: string): { query: Query, charsParsed: number } {
+    const query = new Query();
     let term = '';
     let isPhrase = false;
-    let isGroup = false;
     let isEscaped = false;
     let isProhibited = false;
     let isRequired = false;
@@ -25,7 +28,8 @@ export class Query {
     let isRange = false;
     let range = [];
 
-    for (let char of input) {
+
+    for (let i = 0, l = input.length, char = input[0]; i < l; i++, char = input[i]) {
       if (!isPhrase && char === ' ' && term !== '') { // term boundary
         if (term === 'OR' || term === '||') {
           isOr = true;
@@ -41,15 +45,15 @@ export class Query {
           }
         } else {
           const queryConjuctionOperator = isOr ? QueryConjuctionOperator.OR : isAnd ? QueryConjuctionOperator.AND : isNot ? QueryConjuctionOperator.NOT : undefined;
-          query.addTerm(Query.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, modifierValue, field, range), queryConjuctionOperator);
+          query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, modifierValue, field, range), queryConjuctionOperator);
           isOr = false;
           isAnd = false;
           isNot = false;
           range = [];
+          field = undefined;
         }
 
         char = '';
-        field = undefined;
         term = '';
         modifierValue = '';
         hasWildcard = false;
@@ -57,6 +61,8 @@ export class Query {
         isBoostValue = false;
         isRequired = false;
         isProhibited = false;
+      } else if (char === ' ' && term === '') {
+        char = '';
       }
 
       if (!isEscaped) {
@@ -66,23 +72,26 @@ export class Query {
             char = '';
             break;
           case '(':
-            // group start
-            // RECURSE HERE?
             if (term === '') {
-              isGroup = true;
+              const queryGroup = QueryParser._parse(input.substring(i + 1));
+              i += queryGroup.charsParsed + 1;
+              query.addTerm(queryGroup.query);
+              if (field) {
+                query.field = field;
+                field = '';
+              }
               char = '';
             } else {
               hasSyntaxError = true;
             }
             break;
           case ')':
-            // group end
-            // END RECURSE HERE?
             if (term === '') {
               hasSyntaxError = true;
             } else {
-              isGroup = false;
-              char = '';
+              const queryConjuctionOperator = isOr ? QueryConjuctionOperator.OR : isAnd ? QueryConjuctionOperator.AND : isNot ? QueryConjuctionOperator.NOT : undefined;
+              query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, modifierValue, field, range), queryConjuctionOperator);
+              return { query, charsParsed: i };
             }
             break;
           case '"':
@@ -177,10 +186,10 @@ export class Query {
 
     if (term || range.length === 2) {
       const queryConjuctionOperator = isOr ? QueryConjuctionOperator.OR : isAnd ? QueryConjuctionOperator.AND : isNot ? QueryConjuctionOperator.NOT : undefined;
-      query.addTerm(Query.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, modifierValue, field, range), queryConjuctionOperator);
+      query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, modifierValue, field, range), queryConjuctionOperator);
     }
 
-    return query;
+    return { query, charsParsed: input.length };
   }
 
   private static createQueryTerm(term: string, isRequired = false, isProhibited = false, isFuzzyOrProximityValue = false, isBoostValue = false, hasWildcard = false, modifierValue: string, field: string, range: string[]): QueryTerm {

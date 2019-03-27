@@ -14,7 +14,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
 import { Subscription } from 'rxjs/internal/Subscription';
 
-import { Query, QueryTerm } from './models';
+import { Query, QueryParser } from './models';
 import { isNullOrWhiteSpace } from '../shared/string';
 
 @Component({
@@ -69,20 +69,26 @@ export class LuceneQueryBuilderComponent implements OnInit, OnDestroy {
   private noop2(e: any) { console.log('noop2', e); }
 
   private onTab(event: KeyboardEvent) {
-    this.addTerm((event.target as HTMLInputElement).value);
     event.preventDefault();
     event.stopPropagation();
+    this.parseAndAddQuery((event.target as HTMLInputElement).value);
   }
 
   private onEnter(event: KeyboardEvent) {
-    this.addTerm((event.target as HTMLInputElement).value);
+    this.parseAndAddQuery((event.target as HTMLInputElement).value);
   }
 
-  private addTerm(term: string) {
-    if (isNullOrWhiteSpace(term)) { return; }
+  private parseAndAddQuery(input: string) {
+    if (isNullOrWhiteSpace(input)) { return; }
 
-    this.query.addTerm(new QueryTerm(term));
-    this.query = this.query.clone();
+    const parsedQuery = QueryParser.parse(input);
+    if (!this.query.terms.length) {
+      this.query = parsedQuery;
+    } else {
+      this.query.addTerm(parsedQuery);
+      this.query = this.query.clone();
+    }
+
     (this.userInputElement.nativeElement as HTMLInputElement).value = '';
   }
 

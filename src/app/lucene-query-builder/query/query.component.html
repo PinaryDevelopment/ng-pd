@@ -1,3 +1,7 @@
+<ng-container *ngIf="query?.field">
+  <span>{{query.field}}</span>
+  <span class="syntax">:</span>
+</ng-container>
 <ng-container *ngFor="let queryTerm of query.terms; let $i = index">
   <app-query-conjunction-operator *ngIf="$i !== 0" [operator]="query.operators[$i - 1]" (change)="query.operators[$i - 1] = $event"></app-query-conjunction-operator>
   <app-query-term cdkDrag cdkDropList *ngIf="!isQuery(queryTerm)" cdkDragLockAxis="x" [queryTerm]="queryTerm" [cdkDragData]="queryTerm" [cdkDropListData]="queryTerm" (change)="queryTerm = $event" (cdkDropListDropped)="onDrop($event)"></app-query-term>
