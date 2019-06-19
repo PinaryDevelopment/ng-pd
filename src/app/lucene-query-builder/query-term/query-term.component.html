@@ -31,7 +31,11 @@
 </ng-container>
 
 <ng-container *ngIf="queryTerm?.range">
+  <span class="syntax" *ngIf="queryTerm.isInclusiveRange">[</span>
+  <span class="syntax" *ngIf="queryTerm.isExclusiveRange">{{'{'}}</span>
   {{queryTerm.range[0]}}
   <span class="chip syntax">TO</span>
   {{queryTerm.range[1]}}
+  <span class="syntax" *ngIf="queryTerm.isExclusiveRange">}</span>
+  <span class="syntax" *ngIf="queryTerm.isInclusiveRange">]</span>
 </ng-container>

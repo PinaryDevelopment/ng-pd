@@ -6,6 +6,8 @@ export class QueryTerm {
   public operator: QueryOperator;
   public field: string;
   public hasWildcard = false;
+  public isInclusiveRange = false;
+  public isExclusiveRange = false;
 
   public set range(range: string[]) {
     if (!range || range.length !== 2) {
@@ -77,7 +79,7 @@ export class QueryTerm {
   }
   private _boostFactor: number;
 
-  constructor(public term: string) { // update to take a string(a.k.a term) or string[](a.k.a. range) and an optional field
+  constructor(public term: string = '') { // update to take a string(a.k.a term) or string[](a.k.a. range) and an optional field
     this.type = term.indexOf(' ') === -1 ? QueryTermType.SingleTerm : QueryTermType.Phrase;
   }
 }

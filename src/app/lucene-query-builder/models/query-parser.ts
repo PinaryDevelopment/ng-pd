@@ -25,7 +25,8 @@ export class QueryParser {
     let isNot = false;
     let field: string;
     let hasWildcard = false;
-    let isRange = false;
+    let isExclusiveRange = false;
+    let isInclusiveRange = false;
     let range = [];
 
 
@@ -37,20 +38,21 @@ export class QueryParser {
           isAnd = true;
         } else if (term === 'NOT' || term === '!') {
           isNot = true;
-        } else if (isRange) {
+        } else if (isExclusiveRange || isInclusiveRange) {
           if (range.length === 0) {
             range.push(term);
           } else if (term !== 'TO') {
-            isRange = false;
           }
         } else {
           const queryConjuctionOperator = isOr ? QueryConjuctionOperator.OR : isAnd ? QueryConjuctionOperator.AND : isNot ? QueryConjuctionOperator.NOT : undefined;
-          query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, modifierValue, field, range), queryConjuctionOperator);
+          query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, isInclusiveRange, isExclusiveRange, modifierValue, field, range), queryConjuctionOperator);
           isOr = false;
           isAnd = false;
           isNot = false;
           range = [];
           field = undefined;
+          isExclusiveRange = false;
+          isInclusiveRange = false;
         }
 
         char = '';
@@ -90,7 +92,7 @@ export class QueryParser {
               hasSyntaxError = true;
             } else {
               const queryConjuctionOperator = isOr ? QueryConjuctionOperator.OR : isAnd ? QueryConjuctionOperator.AND : isNot ? QueryConjuctionOperator.NOT : undefined;
-              query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, modifierValue, field, range), queryConjuctionOperator);
+              query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, isInclusiveRange, isExclusiveRange, modifierValue, field, range), queryConjuctionOperator);
               return { query, charsParsed: i };
             }
             break;
@@ -147,22 +149,36 @@ export class QueryParser {
             }
             break;
           case '{':
+            if (field === '') {
+              hasSyntaxError = true;
+            } else {
+              isExclusiveRange = true;
+              char = '';
+            }
+            break;
           case '[':
             if (field === '') {
               hasSyntaxError = true;
             } else {
-              isRange = true;
+              isInclusiveRange = true;
               char = '';
             }
             break;
           case '}':
-          case ']':
-            if (!isRange) {
+            if (!isExclusiveRange) {
               hasSyntaxError = true;
             } else {
               char = '';
               range.push(term);
-              isRange = false;
+              term = '';
+            }
+            break;
+          case ']':
+            if (!isInclusiveRange) {
+              hasSyntaxError = true;
+            } else {
+              char = '';
+              range.push(term);
               term = '';
             }
             break;
@@ -186,13 +202,13 @@ export class QueryParser {
 
     if (term || range.length === 2) {
       const queryConjuctionOperator = isOr ? QueryConjuctionOperator.OR : isAnd ? QueryConjuctionOperator.AND : isNot ? QueryConjuctionOperator.NOT : undefined;
-      query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, modifierValue, field, range), queryConjuctionOperator);
+      query.addTerm(QueryParser.createQueryTerm(term, isRequired, isProhibited, isFuzzyOrProximityValue, isBoostValue, hasWildcard, isInclusiveRange, isExclusiveRange, modifierValue, field, range), queryConjuctionOperator);
     }
 
     return { query, charsParsed: input.length };
   }
 
-  private static createQueryTerm(term: string, isRequired = false, isProhibited = false, isFuzzyOrProximityValue = false, isBoostValue = false, hasWildcard = false, modifierValue: string, field: string, range: string[]): QueryTerm {
+  private static createQueryTerm(term: string, isRequired = false, isProhibited = false, isFuzzyOrProximityValue = false, isBoostValue = false, hasWildcard = false, isInclusiveRange = false, isExclusiveRange = false, modifierValue: string, field: string, range: string[]): QueryTerm {
     const queryTerm = new QueryTerm(term);
     const isPhrase = term.indexOf(' ') !== -1;
     queryTerm.type = isPhrase ? QueryTermType.Phrase : QueryTermType.SingleTerm;
@@ -201,6 +217,8 @@ export class QueryParser {
 
     if (range.length) {
       queryTerm.range = range;
+      queryTerm.isExclusiveRange = isExclusiveRange;
+      queryTerm.isInclusiveRange = isInclusiveRange;
     }
 
     if (isRequired) {

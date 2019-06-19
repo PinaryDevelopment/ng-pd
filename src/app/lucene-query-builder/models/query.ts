@@ -9,10 +9,14 @@ export class Query {
     this.terms = terms.map(term => {
       if ((term as Query).terms) {
         const query = term as Query;
-        return new Query(query.terms, query.operators);
+        const newQuery = new Query(query.terms, query.operators);
+        newQuery.field = query.field;
+        return newQuery;
       }
 
-      return new QueryTerm((term as QueryTerm).term);
+      const newQueryTerm = new QueryTerm();
+      Object.assign(newQueryTerm, term);
+      return newQueryTerm;
     });
   }
 
