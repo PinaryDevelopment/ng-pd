@@ -27,7 +27,7 @@ export class LuceneQueryBuilderComponent implements OnInit, OnDestroy {
   query = new Query();
   userInputInFocus = false;
 
-  @ViewChild('userInput') userInputElement: ElementRef;
+  @ViewChild('userInput', { static: true }) userInputElement: ElementRef;
   private input: Observable<KeyboardEvent>;
   private inputSubject = new Subject<KeyboardEvent>();
   private subscriptions: Subscription[] = [];
